@@ -10,6 +10,7 @@ class PosMonthlyPaymentsReport(models.Model):
     _order = 'date desc'
 
     month = fields.Date(string='Month', readonly=True)
+    config_id = fields.Many2one('pos.config', string='Point of Sale', readonly=True)
     cash_total = fields.Float(string='Cash Total', readonly=True)
     card_total = fields.Float(string='Card Total', readonly=True)
     acc_total = fields.Float(string='Account Total', readonly=True)
@@ -19,6 +20,7 @@ class PosMonthlyPaymentsReport(models.Model):
             SELECT
                 MIN(pos_payment.id) as id,
                 DATE_TRUNC('month', pos_payment.create_date AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Melbourne')::date as month,
+                pos_session.config_id config_id,
                 sum(amount) filter (where pos_payment_method.name = 'Cash') as cash_total,
                 sum(amount) filter (where pos_payment_method.name = 'Card') as card_total,
                 sum(amount) filter (where pos_payment_method.name = 'Customer Account') as acc_total
@@ -26,12 +28,15 @@ class PosMonthlyPaymentsReport(models.Model):
 
     def _from(self):
         return """
-            FROM pos_payment left join pos_payment_method on pos_payment.payment_method_id = pos_payment_method.id
+            FROM pos_payment
+            lEFT JOIN pos_payment_method on pos_payment.payment_method_id = pos_payment_method.id
+            LEFT JOIN pos_order on pos_order.id = pos_payment.pos_order_id
+            LEFT JOIN pos_session on pos_order.session_id = pos_session.id
         """
 
     def _group_by(self):
         return """
-            GROUP BY 2
+            GROUP BY 2,3
         """
 
     def init(self):

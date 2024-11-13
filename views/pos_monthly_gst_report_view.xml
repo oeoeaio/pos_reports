@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_report_pos_monthly_gst_tree" model="ir.ui.view">
-        <field name="name">report.pos.monthly_gst.tree</field>
+    <record id="view_report_pos_monthly_gst_pivot" model="ir.ui.view">
+        <field name="name">report.pos.monthly_gst.pivot</field>
         <field name="model">report.pos.monthly_gst</field>
         <field name="arch" type="xml">
-            <tree string="Point of Sale Monthly GST" create="false" default_order="month desc">
-                <field name="month" string="Order Month"/>
-                <field name="gst_total" string="GST Total"/>
-            </tree>
+            <pivot string="Point of Sale Monthly GST">
+                <field name="month" type="row"/>
+                <field name="gst_total" type="measure"/>
+            </pivot>
         </field>
     </record>
 
@@ -36,7 +36,7 @@
         <field name="name">Monthly GST</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">report.pos.monthly_gst</field>
-        <field name="view_mode">tree,graph</field>
+        <field name="view_mode">pivot,graph</field>
         <field name="search_view_id" ref="view_report_pos_monthly_gst_search"/>
         <field name="context">{'group_by_no_leaf':1,'group_by':[]}</field>
     </record>

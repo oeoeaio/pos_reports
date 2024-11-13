@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_report_pos_monthly_payments_tree" model="ir.ui.view">
-        <field name="name">report.pos.monthly_payments.tree</field>
+    <record id="view_report_pos_monthly_payments_pivot" model="ir.ui.view">
+        <field name="name">report.pos.monthly_payments.pivot</field>
         <field name="model">report.pos.monthly_payments</field>
         <field name="arch" type="xml">
-            <tree string="Point of Sale Monthly Payments" create="false" default_order="month desc">
-                <field name="month" string="Month"/>
-                <field name="cash_total" string="Cash Total"/>
-                <field name="card_total" string="Card Total"/>
-                <field name="acc_total" string="Account Total"/>
-            </tree>
+            <pivot string="Point of Sale Monthly Payments">
+                <field name="month" type="row"/>
+                <field name="cash_total" type="measure"/>
+                <field name="card_total" type="measure"/>
+                <field name="acc_total" type="measure"/>
+            </pivot>
         </field>
     </record>
 
@@ -40,7 +40,7 @@
         <field name="name">Monthly Payments</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">report.pos.monthly_payments</field>
-        <field name="view_mode">tree,graph</field>
+        <field name="view_mode">pivot,graph</field>
         <field name="search_view_id" ref="view_report_pos_monthly_payments_search"/>
         <field name="context">{'group_by_no_leaf':1,'group_by':[]}</field>
     </record>

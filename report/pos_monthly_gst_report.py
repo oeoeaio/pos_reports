@@ -10,7 +10,7 @@ class PosMonthlyGSTReport(models.Model):
     _order = 'date desc'
 
     month = fields.Date(string='Order Month', readonly=True)
-    pos_config_name = fields.Char(string='POS Config Name', readonly=True)
+    config_id = fields.Many2one('pos.config', string='Point of Sale', readonly=True)
     gst_total = fields.Float(string='GST Total', readonly=True)
 
     def _select(self):
@@ -18,7 +18,7 @@ class PosMonthlyGSTReport(models.Model):
             SELECT
                 MIN(pos_order.id) as id,
                 DATE_TRUNC('month', pos_order.create_date AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Melbourne')::date as month,
-                pos_config.name pos_config_name,
+                pos_session.config_id config_id,
                 sum(pos_order.amount_tax) as gst_total
         """
 
@@ -26,7 +26,6 @@ class PosMonthlyGSTReport(models.Model):
         return """
             FROM pos_order
             LEFT JOIN pos_session on pos_session.id = pos_order.session_id
-            LEFT JOIN pos_config on pos_config.id = pos_session.config_id
         """
 
     def _where(self):
