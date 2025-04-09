@@ -9,6 +9,7 @@
                 <field name="cash_total" type="measure"/>
                 <field name="card_total" type="measure"/>
                 <field name="acc_total" type="measure"/>
+                <field name="food_gift_total" type="measure"/>
             </pivot>
         </field>
     </record>
@@ -22,6 +23,7 @@
                 <field name="cash_total" type="measure"/>
                 <field name="card_total" type="measure"/>
                 <field name="acc_total" type="measure"/>
+                <field name="food_gift_total" type="measure"/>
             </graph>
         </field>
     </record>

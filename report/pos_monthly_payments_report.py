@@ -14,6 +14,7 @@ class PosMonthlyPaymentsReport(models.Model):
     cash_total = fields.Float(string='Cash Total', readonly=True)
     card_total = fields.Float(string='Card Total', readonly=True)
     acc_total = fields.Float(string='Account Total', readonly=True)
+    food_gift_total = fields.Float(string='Food Gift Card Total', readonly=True)
 
     def _select(self):
         return """
@@ -23,7 +24,8 @@ class PosMonthlyPaymentsReport(models.Model):
                 pos_session.config_id config_id,
                 sum(amount) filter (where pos_payment_method.name = 'Cash') as cash_total,
                 sum(amount) filter (where pos_payment_method.name = 'Card') as card_total,
-                sum(amount) filter (where pos_payment_method.name = 'Customer Account') as acc_total
+                sum(amount) filter (where pos_payment_method.name = 'Customer Account') as acc_total,
+                sum(amount) filter (where pos_payment_method.name = 'Food Gift Card') as food_gift_total
         """
 
     def _from(self):
